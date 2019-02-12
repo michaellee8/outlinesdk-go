@@ -77,10 +77,10 @@ func TestClient(t *testing.T) {
 		t.Error(err)
 	}
 	t.Logf("GetAccessKeys: %v", *list)
-	if getKeyWithId(list, keyID) == nil {
+	if getKeyWithID(list, keyID) == nil {
 		t.Error("such key does not exists")
 	}
-	originalName = getKeyWithId(list, keyID).Name
+	originalName = getKeyWithID(list, keyID).Name
 	t.Logf("original key name is %s", originalName)
 	randomName = randomString()
 	err = client.RenameAccessKey(keyID, randomName)
@@ -91,7 +91,7 @@ func TestClient(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if getKeyWithId(changedList, keyID).Name != randomName {
+	if getKeyWithID(changedList, keyID).Name != randomName {
 		t.Error("key does not match new name")
 	}
 	err = client.DeleteAccessKey(keyID)
@@ -102,7 +102,7 @@ func TestClient(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if getKeyWithId(newList, keyID) != nil {
+	if getKeyWithID(newList, keyID) != nil {
 		t.Error("key is not deleted")
 	}
 	t.Logf("Latest GetAccessKeys: %v", *newList)
@@ -113,7 +113,7 @@ func TestClient(t *testing.T) {
 	t.Logf("GetUsageMetrics: %v", *usageInfo)
 }
 
-func getKeyWithId(l *AccessKeyList, id string) *AccessKey {
+func getKeyWithID(l *AccessKeyList, id string) *AccessKey {
 	for _, k := range *l {
 		if k.ID == id {
 			return &k

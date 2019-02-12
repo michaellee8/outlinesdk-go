@@ -20,6 +20,9 @@ type Client struct {
 
 // NewClient creates a new Outline SDK Client with apiUrl and certSha256 as provided by /opt/outline/access.txt
 func NewClient(apiURL string, certSha256 string) (*Client, error) {
+	if apiURL[len(apiURL)-1:] != "/" {
+		apiURL += "/"
+	}
 	cert, err := hex.DecodeString(certSha256)
 	if err != nil {
 		return nil, err
@@ -49,7 +52,7 @@ var httpClient = http.Client{
 // GetServerInfo retrieves information about the server with /access.
 // Returns ServerInfo if success and an error if failed
 func (c *Client) GetServerInfo() (*ServerInfo, error) {
-	req, err := c.newReq(http.MethodGet, "/server", nil)
+	req, err := c.newReq(http.MethodGet, "server", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +68,7 @@ func (c *Client) GetServerInfo() (*ServerInfo, error) {
 // Returns nil if success and an error if failed
 func (c *Client) RenameServer(name string) (err error) {
 	reqQbj := NameType{Name: name}
-	req, err := c.newReq(http.MethodPut, "/name", reqQbj)
+	req, err := c.newReq(http.MethodPut, "name", reqQbj)
 	if err != nil {
 		return err
 	}
@@ -79,7 +82,7 @@ func (c *Client) RenameServer(name string) (err error) {
 
 // GetMetricsSetting get metrics sharing settings of the server with /metrics/enabled
 func (c *Client) GetMetricsSetting() (*bool, error) {
-	req, err := c.newReq(http.MethodGet, "/metrics/enabled", nil)
+	req, err := c.newReq(http.MethodGet, "metrics/enabled", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +96,7 @@ func (c *Client) GetMetricsSetting() (*bool, error) {
 
 // SetMetricsSetting set metric sharing settings of the server with /metrics/enabled
 func (c *Client) SetMetricsSetting(opt bool) error {
-	req, err := c.newReq(http.MethodPut, "/metrics/enabled", &MetricsSetting{MetricsEnabled: opt})
+	req, err := c.newReq(http.MethodPut, "metrics/enabled", &MetricsSetting{MetricsEnabled: opt})
 	if err != nil {
 		return err
 	}
@@ -106,7 +109,7 @@ func (c *Client) SetMetricsSetting(opt bool) error {
 
 // CreateAccessKey creates a new access key entry
 func (c *Client) CreateAccessKey() (*AccessKey, error) {
-	req, err := c.newReq(http.MethodPost, "/access-keys", nil)
+	req, err := c.newReq(http.MethodPost, "access-keys", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +123,7 @@ func (c *Client) CreateAccessKey() (*AccessKey, error) {
 
 // GetAccessKeys retrieve the list of access keys on the server
 func (c *Client) GetAccessKeys() (*AccessKeyList, error) {
-	req, err := c.newReq(http.MethodGet, "/access-keys", nil)
+	req, err := c.newReq(http.MethodGet, "access-keys", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +138,7 @@ func (c *Client) GetAccessKeys() (*AccessKeyList, error) {
 
 // DeleteAccessKey deletes the access key with given id
 func (c *Client) DeleteAccessKey(id string) error {
-	req, err := c.newReq(http.MethodDelete, fmt.Sprintf("/access-keys/%s", url.PathEscape(id)), nil)
+	req, err := c.newReq(http.MethodDelete, fmt.Sprintf("access-keys/%s", url.PathEscape(id)), nil)
 	if err != nil {
 		return err
 	}
@@ -148,7 +151,7 @@ func (c *Client) DeleteAccessKey(id string) error {
 
 // RenameAccessKey rename the access key with given id to given name
 func (c *Client) RenameAccessKey(id, name string) error {
-	req, err := c.newReq(http.MethodPut, fmt.Sprintf("/access-keys/%s/name", url.PathEscape(id)), NameType{Name: name})
+	req, err := c.newReq(http.MethodPut, fmt.Sprintf("access-keys/%s/name", url.PathEscape(id)), NameType{Name: name})
 	if err != nil {
 		return err
 	}
@@ -161,7 +164,7 @@ func (c *Client) RenameAccessKey(id, name string) error {
 
 // GetUsageMetrics get the usage statistics of different account in the server
 func (c *Client) GetUsageMetrics() (*map[string]int64, error) {
-	req, err := c.newReq(http.MethodGet, "/metrics/transfer", nil)
+	req, err := c.newReq(http.MethodGet, "metrics/transfer", nil)
 	if err != nil {
 		return nil, err
 	}

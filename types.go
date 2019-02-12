@@ -32,11 +32,11 @@ type UsageInfo struct {
 
 // ServerInfo is a struct that provides server's information
 type ServerInfo struct {
-	Name                 string
-	ServerID             string
-	MetricsEnabled       string
-	CreatedTimestampMs   int64
-	PortForNewAccessKeys int
+	Name                 string `json:"name"`
+	ServerID             string `json:"serverId"`
+	MetricsEnabled       bool   `json:"metricsEnabled"`
+	CreatedTimestampMs   int64  `json:"createdTimestampMs"`
+	PortForNewAccessKeys int    `json:"portForNewAccessKeys"`
 }
 
 // CreatedTime parses CreatedTimestampMs and returns a time.Time

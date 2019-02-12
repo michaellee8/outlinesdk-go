@@ -22,8 +22,8 @@ type AccessKey struct {
 	AccessURL string `json:"accessUrl"`
 }
 
-// AccessKeyList is a map with access key's id as its key
-type AccessKeyList map[string]AccessKey
+// AccessKeyList is a slice of AccessKey
+type AccessKeyList []AccessKey
 
 // UsageInfo is a map with access key's id as its key and bytes transferred per user as its value
 type UsageInfo struct {
@@ -42,4 +42,8 @@ type ServerInfo struct {
 // CreatedTime parses CreatedTimestampMs and returns a time.Time
 func (i *ServerInfo) CreatedTime() time.Time {
 	return time.Unix(0, i.CreatedTimestampMs*1000000)
+}
+
+type getAccessKeysResponse struct {
+	AccessKeys AccessKeyList `json:"accessKeys"`
 }

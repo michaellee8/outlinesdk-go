@@ -14,22 +14,20 @@ func (c *Client) newReq(method, path string, obj interface{}) (*http.Request, er
 	if err != nil {
 		return nil, err
 	}
-	realPath := c.ApiUrl.ResolveReference(u)
+	realPath := c.APIURL.ResolveReference(u)
 	if obj == nil {
 		return http.NewRequest(method, realPath.String(), nil)
-	} else {
-		body, err := json.Marshal(obj)
-		if err != nil {
-			return nil, err
-		}
-		req, err := http.NewRequest(method, realPath.String(), bytes.NewReader(body))
-		if err != nil {
-			return nil, err
-		}
-		req.Header.Set("Content-Type", "application/json")
-		return req, nil
 	}
-
+	body, err := json.Marshal(obj)
+	if err != nil {
+		return nil, err
+	}
+	req, err := http.NewRequest(method, realPath.String(), bytes.NewReader(body))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	return req, nil
 }
 
 // Helper method to run a http.Request
@@ -38,7 +36,7 @@ func (c *Client) do(req *http.Request, supposedStatusCode int, obj interface{}) 
 	if err != nil {
 		return err
 	}
-	if !CheckTlsCert(res.TLS, c.CertSha256) {
+	if !CheckTLSCert(res.TLS, c.CertSHA256) {
 		return errors.New("invalid https certificate")
 	}
 	if supposedStatusCode != res.StatusCode {

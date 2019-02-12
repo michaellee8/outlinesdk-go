@@ -8,11 +8,12 @@ import (
 	"regexp"
 )
 
-// CheckTLSCert checks the custom tls cert from shadowbox
-// These cert are indeed strange given that they have no SANs, neither IP or domain
+// CheckTLSCert checks the custom tls cert from shadowbox.
+// These cert are indeed strange given that they have no SANs, neither IP or domain.
 // Hence I can only implement an after connection check for it.
 // However, it may means that a MITM attack would be able to get the access key
 // since the access key is transferred to the server in the request
+//
 // TODO(michaellee8): Implement custom TLS transport to prevent this security loophole
 func CheckTLSCert(con *tls.ConnectionState, fp []byte) bool {
 	for _, cert := range con.PeerCertificates {
